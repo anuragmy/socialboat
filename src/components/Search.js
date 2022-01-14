@@ -1,6 +1,9 @@
 import React from "react";
 
-const Search = () => {
+const Search = ({ search }) => {
+  const handleChange = (e) => {
+    search(e.target.value);
+  };
   return (
     <div>
       <div className="pt-2 relative mx-auto text-gray-600">
@@ -9,6 +12,7 @@ const Search = () => {
           type="search"
           name="search"
           placeholder="Search"
+          onChange={handleChange}
         />
       </div>
     </div>

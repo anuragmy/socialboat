@@ -1,11 +1,15 @@
 import React from "react";
 import TrainerCard from "./TrainerCard";
 
-const Trainers = ({ data }) => {
+const Trainers = ({ data, selectedTrainer }) => {
   return (
-    <div className="grid-rows-1">
+    <div>
       {data.map((item) => (
-        <TrainerCard key={item.id} item={item} />
+        <TrainerCard
+          key={item.id}
+          item={item}
+          selectedTrainer={selectedTrainer}
+        />
       ))}
     </div>
   );

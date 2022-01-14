@@ -36,8 +36,10 @@ const App = () => {
   const handleSearch = (value) => {
     let filterTrainer = [];
     if (value)
-      filterTrainer = trainers.filter((item) =>
-        item?.firstname.includes(value)
+      filterTrainer = trainers.filter(
+        (item) =>
+          item?.firstname.toLowerCase().includes(value.toLowerCase()) ||
+          item?.lastname.toLowerCase().includes(value.toLowerCase())
       );
     else filterTrainer = trainers;
     setFiltered(filterTrainer);
@@ -46,15 +48,20 @@ const App = () => {
   const selectedTrainer = (item) => setTrainerName(item);
 
   return (
-    <div className="grid place-items-center min-h-screen">
-      <div className="p-4 m-w-5xl grid gap-4">
-        {!trainers.length && <Loading />}
-        <Search search={(val) => handleSearch(val)} />
+    <div>
+      <div className="grid place-items-center min-h-screen">
+        <div className="p-4 m-w-5xl grid gap-4">
+          {!trainers.length && <Loading />}
+          <Search search={(val) => handleSearch(val)} />
+        </div>
+      </div>
+
+      <div className="p-4">
         <Trainers
           data={filtered}
           selectedTrainer={(item) => selectedTrainer(item)}
         />
-        <TrainerVideos name={trainerName} />
+        {trainerName && <TrainerVideos name={trainerName} />}
       </div>
     </div>
   );

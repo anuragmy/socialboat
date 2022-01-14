@@ -1,4 +1,7 @@
 import React from "react";
+import Twitter from "../assets/twitter.svg";
+import Instagram from "../assets/instagram.svg";
+import Facebook from "../assets/facebook.svg";
 
 const TrainerCard = ({ item, selectedTrainer }) => {
   const { firstname, image, lastname } = item;
@@ -16,6 +19,12 @@ const TrainerCard = ({ item, selectedTrainer }) => {
           <h2 className="text-white font-bold text-2xl tracking-wide">
             {firstname} {lastname}
           </h2>
+        </div>
+
+        <div className="mt-8 flex justify-between">
+          <img src={Twitter} alt={Twitter} srcSet="" className="h-8 w-8" />
+          <img src={Instagram} alt={Twitter} srcSet="" className="h-8 w-8" />
+          <img src={Facebook} alt={Facebook} srcSet="" className="h-8 w-8" />
         </div>
       </div>
     </div>

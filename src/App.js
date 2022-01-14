@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import Video from "./apis/video";
 import Loading from "./components/Loading";
 import Search from "./components/Search";
 import Trainers from "./components/Trainers";
 import { API } from "./constants";
 import TrainerVideos from "./components/trainerVideos";
+import { KEY } from "./apis/video";
 
 const App = () => {
   const [trainers, setTrainers] = useState([]);
   const [filtered, setFiltered] = useState([]);
+  const [video, setVideos] = useState([]);
   const [trainerName, setTrainerName] = useState("");
 
   useEffect(() => {
@@ -45,7 +47,24 @@ const App = () => {
     setFiltered(filterTrainer);
   };
 
-  const selectedTrainer = (item) => setTrainerName(item);
+  const getVideos = async () => {
+    const response = await Video.get("/search", {
+      params: {
+        part: "snippet",
+        maxResults: 5,
+        key: KEY,
+        q: trainerName,
+      },
+    });
+    if (response) {
+      const videos = response.data.items.filter((item) => item.id.videoId);
+      setVideos(videos);
+    }
+  };
+  const selectedTrainer = (item) => {
+    setTrainerName(item);
+    getVideos();
+  };
 
   return (
     <div>
@@ -61,7 +80,7 @@ const App = () => {
           data={filtered}
           selectedTrainer={(item) => selectedTrainer(item)}
         />
-        {trainerName && <TrainerVideos name={trainerName} />}
+        {trainerName && <TrainerVideos video={video} />}
       </div>
     </div>
   );

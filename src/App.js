@@ -52,6 +52,7 @@ const App = () => {
       );
     filterTrainer = trainers;
     setFiltered(filterTrainer);
+    video.map((i) => console.log(i));
   };
 
   const getVideos = async () => {

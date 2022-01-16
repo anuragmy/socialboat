@@ -1,17 +1,19 @@
 import React from "react";
-import Search from "./Search";
 import TrainerVideoCard from "./trainerVideoCard";
+import VideoSkeleton from "./VideoSkeleton";
 
 const TrainerVideos = ({ video }) => {
   return (
-    <div>
-      {video.map((item) => (
-        <TrainerVideoCard
-          key={item.etag}
-          id={item.id.videoId}
-          title={item.snippet.title}
-        />
-      ))}
+    <div className="grid grid-cols-2 xs:grid-cols-1 place-items-center mt-16">
+      {!video.length
+        ? [1, 2].map((i) => <VideoSkeleton key={i} />)
+        : video.map((item) => (
+            <TrainerVideoCard
+              key={item.etag}
+              id={item.id.videoId}
+              title={item.snippet.title}
+            />
+          ))}
     </div>
   );
 };

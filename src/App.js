@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { Container } from "@material-ui/core";
 import axios from "axios";
 import Video from "./apis/video";
-import Loading from "./components/Loading";
 import Search from "./components/Search";
 import Trainers from "./components/Trainers";
 import { API } from "./constants";
@@ -10,9 +10,16 @@ import { KEY } from "./apis/video";
 
 const App = () => {
   const [trainers, setTrainers] = useState([]);
+  const [showBack, setShowBack] = useState(false);
   const [filtered, setFiltered] = useState([]);
   const [video, setVideos] = useState([]);
   const [trainerName, setTrainerName] = useState("");
+
+  const handleShowTrainers = () => {
+    setTrainerName("");
+    setVideos([]);
+    setShowBack(false);
+  };
 
   useEffect(() => {
     const getTrainers = async () => {
@@ -43,7 +50,7 @@ const App = () => {
           item?.firstname.toLowerCase().includes(value.toLowerCase()) ||
           item?.lastname.toLowerCase().includes(value.toLowerCase())
       );
-    else filterTrainer = trainers;
+    filterTrainer = trainers;
     setFiltered(filterTrainer);
   };
 
@@ -61,26 +68,44 @@ const App = () => {
       setVideos(videos);
     }
   };
-  const selectedTrainer = (item) => {
-    setTrainerName(item);
-    getVideos();
+  const selectedTrainer = (item, type) => {
+    if (type === "home") {
+      setTrainerName(item);
+
+      setShowBack(true);
+      getVideos();
+    } else {
+    }
   };
 
   return (
     <div>
       <div className="grid place-items-center min-h-screen">
         <div className="p-4 m-w-5xl grid gap-4">
-          {!trainers.length && <Loading />}
           <Search search={(val) => handleSearch(val)} />
         </div>
       </div>
 
       <div className="p-4">
-        <Trainers
-          data={filtered}
-          selectedTrainer={(item) => selectedTrainer(item)}
-        />
-        {trainerName && <TrainerVideos video={video} />}
+        <Container>
+          {trainerName ? (
+            <TrainerVideos video={video} />
+          ) : (
+            <Trainers
+              data={filtered}
+              selectedTrainer={(item) => selectedTrainer(item, "home")}
+            />
+          )}
+        </Container>
+
+        {showBack && (
+          <button
+            className="absolute w-16 top-4 left-64 rounded-2xl p-4 bg-blue-500 text-white  hover:bg-blue-300 m-2"
+            onClick={handleShowTrainers}
+          >
+            Back
+          </button>
+        )}
       </div>
     </div>
   );

@@ -26,7 +26,11 @@ const TrainerVideos = ({ video, loading }) => {
       return;
     }
 
-    const items = reorder(video, result.source.index, result.destination.index);
+    const items = reorder(
+      videos,
+      result.source.index,
+      result.destination.index
+    );
 
     setVideos(items);
   };

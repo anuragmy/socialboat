@@ -3,7 +3,7 @@ import React from "react";
 const Loading = () => {
   return (
     <div
-      className=" fixed block top-0 left-0 bg-white opacity-75 z-50"
+      className=" fixed block top-0 left-0 text-green-500 opacity-75 z-50"
       style={{
         position: "absolute",
         top: "50%",

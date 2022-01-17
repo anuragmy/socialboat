@@ -14,6 +14,7 @@ const TrainerCard = ({ item, selectedTrainer }) => {
        rounded-2xl p-8 grow shadow-2xl cursor-pointer
      
       "
+      style={{ margin: "0 auto" }}
       onClick={() => selectedTrainer(name)}
     >
       <div>

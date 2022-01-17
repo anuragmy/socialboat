@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Container } from "@material-ui/core";
 import axios from "axios";
 import Video from "./apis/video";
 import Search from "./components/Search";
@@ -28,7 +27,6 @@ const App = () => {
       setLoading(true);
       try {
         const res = await axios.get(API);
-
         if (res.data) {
           const data = res.data;
           // updating images
@@ -98,34 +96,36 @@ const App = () => {
   return (
     <div>
       <div className="grid place-items-center min-h-screen">
-        <div className="p-4 m-w-5xl grid gap-4">
+        <div className="p-4 m-w-5xl ">
           <Search search={(val) => handleSearch(val)} />
         </div>
+        {showBack && (
+          <>
+            <button
+              className=" w-16  rounded-2xl p-4 bg-blue-500 text-white  hover:bg-blue-300 m-2"
+              onClick={handleShowTrainers}
+            >
+              Back
+            </button>
+            <div className="my-4">
+              <p>(drag to reposition)</p>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="p-4">
-        <Container>
-          {trainerName ? (
-            <TrainerVideos
-              video={videoSearch ? filtered : video}
-              loading={loading}
-            />
-          ) : (
-            <Trainers
-              loading={loading}
-              data={filtered}
-              selectedTrainer={(item) => selectedTrainer(item, "home")}
-            />
-          )}
-        </Container>
-
-        {showBack && (
-          <button
-            className="absolute w-16 top-4 left-64 rounded-2xl p-4 bg-blue-500 text-white  hover:bg-blue-300 m-2"
-            onClick={handleShowTrainers}
-          >
-            Back
-          </button>
+        {trainerName ? (
+          <TrainerVideos
+            video={videoSearch ? filtered : video}
+            loading={loading}
+          />
+        ) : (
+          <Trainers
+            loading={loading}
+            data={filtered}
+            selectedTrainer={(item) => selectedTrainer(item, "home")}
+          />
         )}
       </div>
     </div>

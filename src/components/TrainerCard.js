@@ -4,27 +4,33 @@ import Instagram from "../assets/instagram.svg";
 import Facebook from "../assets/facebook.svg";
 
 const TrainerCard = ({ item, selectedTrainer }) => {
-  const { firstname, image, lastname } = item;
+  // const { firstname, image, lastname } = item;
+  const { name, image, email } = item;
   return (
     <div
-      className="w-72  bg-[#20354b] rounded-2xl p-8 grow shadow-2xl cursor-pointer
+      className="w-72  
+      max-h-80
+      bg-gray-500
+       rounded-2xl p-8 grow shadow-2xl cursor-pointer
      
       "
-      onClick={() => selectedTrainer(firstname)}
+      onClick={() => selectedTrainer(name)}
     >
       <div>
         <div class="tc ">
           <img
             src={image}
+            alt={image}
             class="br-100 h4 w4 dib ba b--black-05 pa2"
             title="Photo of a kitty staring at you"
           />
-          <h1 class="f3 mb2">{firstname} </h1>
-          <h2 class="f5 fw4 gray mt0">{lastname}</h2>
+          <h1 class="f3 mb2">{name} </h1>
+          <h2 class="f5 fw4 gray mt0">{email}</h2>
         </div>
         {/* <div className="mt-6 w-fit">
           <img src={image} className="rounded-lg" alt={image} srcSet="" />
         </div>
+        bg-[#20354b]
 
         <div className="mt-8 ">
           <h2 className="text-white  font-bold text-2xl tracking-wide">

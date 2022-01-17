@@ -14,6 +14,8 @@ const App = () => {
   const [filtered, setFiltered] = useState([]);
   const [video, setVideos] = useState([]);
   const [trainerName, setTrainerName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [videoSearch, setVideoSearch] = useState(false);
 
   const handleShowTrainers = () => {
     setTrainerName("");
@@ -23,10 +25,12 @@ const App = () => {
 
   useEffect(() => {
     const getTrainers = async () => {
+      setLoading(true);
       try {
         const res = await axios.get(API);
-        if (res.data?.data) {
-          const data = res.data?.data;
+
+        if (res.data) {
+          const data = res.data;
           // updating images
           const nd = data.map((item, i) => {
             let image = `https://placeimg.com/640/48${i}/people`;
@@ -34,9 +38,11 @@ const App = () => {
           });
           setTrainers(nd);
           setFiltered(nd);
+          setLoading(false);
         }
       } catch (err) {
         console.log("err", err);
+        setLoading(false);
       }
     };
     getTrainers();
@@ -44,37 +50,47 @@ const App = () => {
 
   const handleSearch = (value) => {
     let filterTrainer = [];
-    if (value)
-      filterTrainer = trainers.filter(
-        (item) =>
-          item?.firstname.toLowerCase().includes(value.toLowerCase()) ||
-          item?.lastname.toLowerCase().includes(value.toLowerCase())
-      );
-    filterTrainer = trainers;
-    setFiltered(filterTrainer);
-    video.map((i) => console.log(i));
+    if (video.length) {
+      setVideoSearch(true);
+      if (value)
+        filterTrainer = video.filter((item) =>
+          item?.snippet?.title?.toLowerCase().includes(value.toLowerCase())
+        );
+      else filterTrainer = video;
+      setFiltered(filterTrainer);
+    } else {
+      setVideoSearch(false);
+      if (value)
+        filterTrainer = trainers.filter((item) =>
+          item?.name.toLowerCase().includes(value.toLowerCase())
+        );
+      else filterTrainer = trainers;
+      setFiltered(filterTrainer);
+    }
   };
 
-  const getVideos = async () => {
+  const getVideos = async (item) => {
+    setLoading(true);
     const response = await Video.get("/search", {
       params: {
         part: "snippet",
         maxResults: 5,
         key: KEY,
-        q: trainerName,
+        q: item,
       },
     });
     if (response) {
       const videos = response.data.items.filter((item) => item.id.videoId);
       setVideos(videos);
-    }
+      setLoading(false);
+    } else setLoading(false);
   };
   const selectedTrainer = (item, type) => {
     if (type === "home") {
       setTrainerName(item);
 
       setShowBack(true);
-      getVideos();
+      getVideos(item);
     } else {
     }
   };
@@ -90,9 +106,13 @@ const App = () => {
       <div className="p-4">
         <Container>
           {trainerName ? (
-            <TrainerVideos video={video} />
+            <TrainerVideos
+              video={videoSearch ? filtered : video}
+              loading={loading}
+            />
           ) : (
             <Trainers
+              loading={loading}
               data={filtered}
               selectedTrainer={(item) => selectedTrainer(item, "home")}
             />

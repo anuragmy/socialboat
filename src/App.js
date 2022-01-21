@@ -3,7 +3,7 @@ import axios from "axios";
 import Video from "./apis/video";
 import Search from "./components/Search";
 import Trainers from "./components/Trainers";
-import { API } from "./constants";
+import { API, IMAGE_API } from "./constants";
 import TrainerVideos from "./components/trainerVideos";
 import { KEY } from "./apis/video";
 
@@ -15,11 +15,13 @@ const App = () => {
   const [trainerName, setTrainerName] = useState("");
   const [loading, setLoading] = useState(false);
   const [videoSearch, setVideoSearch] = useState(false);
+  const [searchVal, setSearchVal] = useState("");
 
   const handleShowTrainers = () => {
     setTrainerName("");
     setVideos([]);
     setShowBack(false);
+    setSearchVal("");
   };
 
   useEffect(() => {
@@ -31,7 +33,7 @@ const App = () => {
           const data = res.data;
           // updating images
           const nd = data.map((item, i) => {
-            let image = `https://placeimg.com/640/48${i}/people`;
+            let image = IMAGE_API(i);
             return { ...item, image };
           });
           setTrainers(nd);
@@ -50,11 +52,12 @@ const App = () => {
     let filterTrainer = [];
     if (video.length) {
       setVideoSearch(true);
-      if (value)
+      if (value) {
+        setSearchVal(value);
         filterTrainer = video.filter((item) =>
           item?.snippet?.title?.toLowerCase().includes(value.toLowerCase())
         );
-      else filterTrainer = video;
+      } else filterTrainer = video;
       setFiltered(filterTrainer);
     } else {
       setVideoSearch(false);
